@@ -7,8 +7,17 @@ struct DocumentListView: View {
     var body: some View {
         List {
             ForEach(docs, id: \.self) { pdf in
-                NavigationLink(pdf.deletingLastPathComponent().lastPathComponent) {
+                NavigationLink {
                     NoteView(pdfURL: pdf)
+                } label: {
+                    Label {
+                        Text(pdf.deletingLastPathComponent().lastPathComponent)
+                            .lineLimit(1)
+                    } icon: {
+                        Image(systemName: "doc.richtext")
+                            .foregroundStyle(.tint)
+                    }
+                    .padding(.vertical, 6)
                 }
             }
             .onDelete { indexSet in
@@ -16,9 +25,17 @@ struct DocumentListView: View {
                 docs = FileStore.listDocuments()
             }
         }
+        .listStyle(.insetGrouped)
         .overlay {
             if docs.isEmpty {
-                ContentUnavailableView("PDF를 가져오세요", systemImage: "doc.badge.plus")
+                ContentUnavailableView {
+                    Label("교재가 없습니다", systemImage: "doc.badge.plus")
+                } description: {
+                    Text("PDF를 가져와서 필기를 시작하세요.\n필기한 페이지는 복사해서 Claude에게 바로 물어볼 수 있어요.")
+                } actions: {
+                    Button("PDF 가져오기") { showImporter = true }
+                        .buttonStyle(.borderedProminent)
+                }
             }
         }
         .navigationTitle("InkAsk")

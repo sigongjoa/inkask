@@ -35,10 +35,23 @@ struct NoteView: View {
                     .frame(width: size.width, height: size.height)
                     .scaleEffect(fit, anchor: .topLeading)
                     .frame(width: size.width * fit, height: size.height * fit, alignment: .topLeading)
+                    .shadow(color: .black.opacity(0.18), radius: 10, y: 3)
+                    .padding(.top, 12)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .overlay(alignment: .top) {
+                        if selecting && selRect == nil {
+                            Text("자를 영역을 드래그하세요")
+                                .font(.footnote.weight(.semibold))
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 7)
+                                .background(.regularMaterial, in: Capsule())
+                                .padding(.top, 28)
+                        }
+                    }
                 }
+                .background(Color(.secondarySystemBackground).ignoresSafeArea())
             } else {
-                Text("PDF를 열 수 없습니다")
+                ContentUnavailableView("PDF를 열 수 없습니다", systemImage: "exclamationmark.triangle")
             }
         }
         .navigationTitle("\(pageIndex + 1) / \(pageCount)")
@@ -57,6 +70,7 @@ struct NoteView: View {
                     guard let page else { return }
                     UIPasteboard.general.image =
                         PageExporter.composite(page: page, drawing: drawing, crop: selRect)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     copied = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
                 }
