@@ -1,24 +1,25 @@
 <title>InkAsk — HTML 디자인 목업</title>
 <style>
   :root {
-    --bg: #F4F3F0;
-    --ink: #1D2433;
-    --muted: #6B7280;
-    --line: #DDD9D0;
+    --bg: #F0EDE6;
+    --ink: #232A3D;
+    --muted: #6E7280;
+    --line: #DCD6C9;
     --card: #FFFFFF;
-    /* iOS 시스템 톤 (프레임 내부 전용 — 테마와 무관하게 라이트 고정) */
-    --ios-bg: #F2F2F7;
-    --ios-chrome: #FAFAFC;
-    --ios-text: #1C1C1E;
-    --ios-gray: #8E8E93;
-    --ios-blue: #0A7AFF;
-    --ios-line: #E3E3E8;
+    --coral: #E06C4F;
+    /* 앱 프레임 내부 토큰 (라이트) */
+    --app-bg: #F3EFE7;
+    --app-chrome: rgba(255,255,255,.92);
+    --app-text: #232A3D;
+    --app-gray: #8A8F9C;
+    --app-line: #E5E0D4;
+    --paper: #FFFFFF;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #15181F; --ink: #E8E6E0; --muted: #9BA1AE; --line: #333947; --card: #1E232D; }
+    :root { --bg: #14161C; --ink: #E9E7E1; --muted: #9BA0AC; --line: #31364200; --line: #313642; --card: #1D212B; }
   }
-  :root[data-theme="dark"] { --bg: #15181F; --ink: #E8E6E0; --muted: #9BA1AE; --line: #333947; --card: #1E232D; }
-  :root[data-theme="light"] { --bg: #F4F3F0; --ink: #1D2433; --muted: #6B7280; --line: #DDD9D0; --card: #FFFFFF; }
+  :root[data-theme="dark"] { --bg: #14161C; --ink: #E9E7E1; --muted: #9BA0AC; --line: #313642; --card: #1D212B; }
+  :root[data-theme="light"] { --bg: #F0EDE6; --ink: #232A3D; --muted: #6E7280; --line: #DCD6C9; --card: #FFFFFF; }
 
   * { box-sizing: border-box; }
   body {
@@ -26,173 +27,221 @@
     font-family: -apple-system, "Apple SD Gothic Neo", Pretendard, "Malgun Gothic", "Segoe UI", sans-serif;
     line-height: 1.55;
   }
-  main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 96px; }
-  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ios-blue); font-weight: 700; margin: 0 0 8px; }
-  h1 { font-size: 32px; margin: 0 0 6px; text-wrap: balance; }
-  .sub { color: var(--muted); max-width: 64ch; margin: 0 0 8px; }
-  h2 { font-size: 20px; margin: 56px 0 4px; }
-  h2 + p { color: var(--muted); font-size: 14px; margin: 0 0 20px; max-width: 70ch; }
+  main { max-width: 1120px; margin: 0 auto; padding: 52px 24px 100px; }
+
+  .wordmark { font-size: 13px; letter-spacing: .02em; font-weight: 800; margin: 0 0 10px; }
+  .wordmark em { font-style: italic; color: var(--coral); }
+  h1 { font-size: 34px; margin: 0 0 8px; text-wrap: balance; letter-spacing: -.01em; }
+  h1 em { font-style: normal; color: var(--coral); }
+  .sub { color: var(--muted); max-width: 62ch; margin: 0 0 6px; }
+  .principle {
+    display: inline-block; margin-top: 14px; font-size: 13.5px; font-weight: 700;
+    border: 1.5px solid var(--coral); color: var(--coral); border-radius: 99px; padding: 6px 16px;
+  }
+  h2 { font-size: 21px; margin: 64px 0 4px; letter-spacing: -.01em; }
+  h2::before { content: "◆ "; color: var(--coral); font-size: 13px; vertical-align: 2px; }
+  h2 + p { color: var(--muted); font-size: 14px; margin: 0 0 22px; max-width: 70ch; }
 
   /* ── iPad 프레임 ── */
-  .stage { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+  .stage { display: flex; flex-wrap: wrap; gap: 36px; align-items: flex-start; }
   figure.pad { margin: 0; }
   .ipad {
-    background: var(--ios-bg); border-radius: 18px; overflow: hidden;
-    border: 10px solid #2A2C31; box-shadow: 0 12px 32px rgba(0,0,0,.18);
+    background: var(--app-bg); border-radius: 20px; overflow: hidden;
+    border: 10px solid #23252B; box-shadow: 0 18px 44px rgba(24,22,18,.25);
     position: relative;
   }
-  .p-portrait { width: 420px; height: 588px; }
-  .p-land { width: 640px; height: 460px; }
-  figcaption { font-size: 13px; color: var(--muted); margin-top: 12px; max-width: 60ch; }
+  .p-portrait { width: 430px; height: 600px; }
+  .p-land { width: 660px; height: 470px; }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 12px; max-width: 58ch; }
   figcaption b { color: var(--ink); }
 
   /* 상단 크롬 */
   .chrome {
-    height: 44px; background: var(--ios-chrome); border-bottom: .5px solid var(--ios-line);
-    display: flex; align-items: center; gap: 10px; padding: 0 12px;
-    font-size: 13px; color: var(--ios-text);
+    height: 46px; background: var(--app-chrome); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--app-line);
+    display: flex; align-items: center; gap: 8px; padding: 0 12px;
+    font-size: 13px; color: var(--app-text); position: relative; z-index: 3;
   }
-  .chrome .back { color: var(--ios-blue); font-size: 15px; display: flex; align-items: center; gap: 3px; }
-  .chrome .title { font-weight: 600; }
-  .chrome .pageno { position: absolute; left: 50%; transform: translateX(-50%); color: var(--ios-gray); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .chrome .back { color: var(--app-gray); font-size: 14px; font-weight: 600; }
+  .chrome .doc { font-weight: 800; font-size: 13.5px; }
+  .chrome .pageno { color: var(--app-gray); font-weight: 600; font-variant-numeric: tabular-nums; font-size: 12px; margin-left: 2px; }
   .grow { flex: 1; }
   .ico {
-    width: 30px; height: 30px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center;
-    color: var(--ios-blue); font-size: 15px;
+    width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+    color: var(--app-text); font-size: 14px; opacity: .75;
   }
-  .ico.on { background: var(--ios-blue); color: #fff; }
+  .ico.ask { color: var(--coral); opacity: 1; }
+  .ico.on { background: var(--coral); color: #fff; opacity: 1; }
 
   /* 페이지 */
-  .paper-wrap { position: absolute; inset: 44px 0 0 0; display: flex; justify-content: center; padding-top: 14px; }
+  .paper-wrap { position: absolute; inset: 46px 0 0 0; display: flex; justify-content: center; padding-top: 16px; }
   .paper {
-    background: #fff; width: 78%; aspect-ratio: 400 / 550;
-    box-shadow: 0 3px 14px rgba(0,0,0,.16); border-radius: 2px;
-    position: relative; overflow: hidden; color: #333;
+    background:
+      radial-gradient(circle, rgba(35,42,61,.055) 1px, transparent 1.2px) 0 0 / 16px 16px,
+      var(--paper);
+    width: 76%; aspect-ratio: 400 / 550;
+    box-shadow: 0 2px 4px rgba(35,42,61,.08), 0 14px 28px rgba(35,42,61,.13);
+    border-radius: 6px; position: relative; overflow: hidden; color: #333;
   }
-  .p-land .paper { width: auto; height: 92%; }
-  .paper h4 { font-size: 13px; margin: 18px 20px 8px; font-weight: 700; color: #222; }
-  .pline { height: 5px; background: #ECEAE4; border-radius: 3px; margin: 8px 20px; }
+  .p-land .paper { width: auto; height: 90%; }
+  .paper h4 { font-size: 13px; margin: 20px 22px 10px; font-weight: 800; color: #2A2F3E; }
+  .pline { height: 5px; background: #EAE6DC; border-radius: 3px; margin: 9px 22px; }
   .pline.w60 { width: 55%; }
-  .fig { position: relative; margin: 12px 34px; height: 38%; }
+  .fig { position: relative; margin: 14px 36px; height: 38%; }
   .fig svg { width: 100%; height: 100%; }
 
-  /* 영역 선택 */
+  /* 영역 선택 — 마칭 앤츠 */
   .marquee {
-    position: absolute; border: 2px solid var(--ios-blue); background: rgba(10,122,255,.08); border-radius: 2px;
+    position: absolute; border-radius: 3px;
+    outline: 2px dashed var(--coral); outline-offset: 0;
+    background: rgba(224,108,79,.07);
+    animation: ants 1.2s linear infinite;
   }
-  .marquee i {
-    position: absolute; width: 8px; height: 8px; background: #fff; border: 2px solid var(--ios-blue); border-radius: 50%;
-  }
-  .marquee .h1 { left: -6px; top: -6px; } .marquee .h2 { right: -6px; top: -6px; }
-  .marquee .h3 { left: -6px; bottom: -6px; } .marquee .h4 { right: -6px; bottom: -6px; }
+  @keyframes ants { to { outline-offset: 0; } } /* outline은 오프셋 애니메이션 불가 — 대체: 보더 이동 */
+  .marquee { outline: none; border: 2px dashed var(--coral); }
+  .marquee i { position: absolute; width: 9px; height: 9px; background: #fff; border: 2.5px solid var(--coral); border-radius: 50%; }
+  .marquee .h1 { left: -7px; top: -7px; } .marquee .h2 { right: -7px; top: -7px; }
+  .marquee .h3 { left: -7px; bottom: -7px; } .marquee .h4 { right: -7px; bottom: -7px; }
   .hint {
-    position: absolute; top: 56px; left: 50%; transform: translateX(-50%);
-    font-size: 11px; font-weight: 600; color: var(--ios-text);
-    background: rgba(250,250,252,.9); backdrop-filter: blur(4px);
-    border: .5px solid var(--ios-line); border-radius: 99px; padding: 5px 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    position: absolute; top: 58px; left: 50%; transform: translateX(-50%); z-index: 4;
+    font-size: 11px; font-weight: 700; color: #fff;
+    background: var(--coral); border-radius: 99px; padding: 6px 14px;
+    box-shadow: 0 4px 12px rgba(224,108,79,.4);
   }
+
+  /* 히어로 버튼 — Claude에 묻기 */
+  .askpill {
+    position: absolute; right: 14px; bottom: 18px; z-index: 5;
+    background: var(--coral); color: #fff; font-weight: 800; font-size: 13px;
+    border-radius: 99px; padding: 11px 18px; display: flex; align-items: center; gap: 7px;
+    box-shadow: 0 8px 20px rgba(224,108,79,.45);
+  }
+  .askpill .star { font-size: 15px; }
 
   /* PKToolPicker 플로팅 팔레트 */
   .toolpicker {
-    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-    background: rgba(250,250,252,.96); border: .5px solid var(--ios-line);
-    border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.16);
-    display: flex; align-items: flex-end; gap: 12px; padding: 8px 16px 0; height: 44px;
+    position: absolute; bottom: 16px; left: 18px; z-index: 4;
+    background: rgba(255,255,255,.96); border: 1px solid var(--app-line);
+    border-radius: 14px; box-shadow: 0 8px 22px rgba(35,42,61,.18);
+    display: flex; align-items: flex-end; gap: 11px; padding: 8px 14px 0; height: 44px;
   }
-  .pen { width: 13px; height: 40px; border-radius: 6px 6px 0 0; position: relative; background: #C8C9CE; }
-  .pen::before { content: ""; position: absolute; top: -7px; left: 3px; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-bottom: 8px solid inherit; }
-  .pen.sel { height: 52px; }
-  .pen.k { background: #3B3B40; } .pen.r { background: #E2574C; } .pen.hl { background: #F5C84C; border-radius: 4px 4px 0 0; }
-  .pen.er { background: #EDEDF0; border: 1px solid #C8C9CE; }
+  .pen { width: 13px; height: 38px; border-radius: 6px 6px 0 0; background: #C8C9CE; }
+  .pen.sel { height: 50px; }
+  .pen.k { background: #2E3442; } .pen.r { background: #D9534A; } .pen.hl { background: #F0BE45; border-radius: 4px 4px 0 0; }
+  .pen.er { background: #F1EFEA; border: 1px solid #C8C9CE; }
 
-  /* 문서 목록 프레임 */
-  .list-large-title { font-size: 24px; font-weight: 800; color: var(--ios-text); padding: 18px 20px 6px; }
-  .cardlist { margin: 8px 16px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
-  .docrow { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-bottom: .5px solid var(--ios-line); font-size: 14px; color: var(--ios-text); }
-  .docrow:last-child { border-bottom: 0; }
-  .docrow .thumb { width: 34px; height: 44px; background: var(--ios-bg); border: .5px solid var(--ios-line); border-radius: 4px; flex: none; display: flex; align-items: center; justify-content: center; }
-  .docrow .thumb svg { width: 22px; height: 30px; }
-  .docrow .meta { flex: 1; min-width: 0; }
-  .docrow .meta small { display: block; color: var(--ios-gray); font-size: 11px; }
-  .docrow .chev { color: #C7C7CC; }
-  .fab-note { padding: 10px 20px 0; font-size: 11px; color: var(--ios-gray); }
+  /* 문서 목록 */
+  .list-title { padding: 20px 22px 4px; font-size: 26px; font-weight: 800; color: var(--app-text); letter-spacing: -.02em; }
+  .list-title em { font-style: italic; color: var(--coral); }
+  .list-sub { padding: 0 22px 12px; font-size: 12px; color: var(--app-gray); }
+  .cardlist { margin: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+  .docrow {
+    display: flex; align-items: center; gap: 14px; padding: 12px 14px;
+    background: var(--paper); border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(35,42,61,.06), 0 4px 10px rgba(35,42,61,.05);
+    font-size: 14px; color: var(--app-text);
+  }
+  .docrow .thumb {
+    width: 38px; height: 50px; background: #FBFAF6; border: 1px solid var(--app-line);
+    border-radius: 5px; flex: none; display: flex; align-items: center; justify-content: center;
+    box-shadow: 1.5px 1.5px 0 var(--app-line);
+  }
+  .docrow .thumb svg { width: 26px; height: 36px; }
+  .docrow .meta { flex: 1; min-width: 0; font-weight: 700; }
+  .docrow .meta small { display: block; color: var(--app-gray); font-size: 11px; font-weight: 500; margin-top: 1px; }
+  .docrow .badge {
+    font-size: 10.5px; font-weight: 800; color: var(--coral);
+    border: 1.5px solid rgba(224,108,79,.45); border-radius: 99px; padding: 2px 8px;
+  }
+  .importbtn {
+    margin: 14px 16px 0; padding: 12px; text-align: center;
+    border: 1.5px dashed var(--app-gray); border-radius: 14px;
+    color: var(--app-gray); font-size: 12.5px; font-weight: 700;
+  }
 
-  /* 스플릿뷰 프레임 */
+  /* 다크 프레임 */
+  .ipad.dark { --app-bg: #191C24; --app-chrome: rgba(28,31,40,.94); --app-text: #E9E7E1; --app-gray: #8A8F9C; --app-line: #2C303B; --paper: #232733; }
+  .ipad.dark .paper { background: radial-gradient(circle, rgba(233,231,225,.06) 1px, transparent 1.2px) 0 0 / 16px 16px, var(--paper); color: #CBD0DC; }
+  .ipad.dark .paper h4 { color: #E2E5EC; }
+  .ipad.dark .pline { background: #313644; }
+  .ipad.dark .toolpicker { background: rgba(35,39,51,.96); }
+
+  /* 스플릿뷰 */
   .split { display: flex; height: 100%; }
-  .split .left { width: 46%; position: relative; background: var(--ios-bg); border-right: 4px solid #2A2C31; }
-  .split .left .chrome { font-size: 11px; }
-  .split .left .paper-wrap { inset: 38px 0 0 0; }
-  .split .left .chrome { height: 38px; }
+  .split .left { width: 46%; position: relative; background: var(--app-bg); border-right: 4px solid #23252B; }
+  .split .left .chrome { height: 40px; font-size: 11px; }
+  .split .left .paper-wrap { inset: 40px 0 0 0; }
   .split .right { flex: 1; background: #FAF9F5; display: flex; flex-direction: column; }
-  .claude-bar { height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: .5px solid var(--ios-line); font-size: 12px; font-weight: 700; color: #3D3929; }
+  .claude-bar { height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: 1px solid #E8E4D8; font-size: 12px; font-weight: 800; color: #3D3929; }
   .claude-star { color: #D97757; font-size: 15px; }
   .chat { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
-  .bubble { border-radius: 12px; padding: 8px 10px; font-size: 11px; line-height: 1.5; max-width: 88%; }
+  .bubble { border-radius: 14px; padding: 9px 11px; font-size: 11px; line-height: 1.55; max-width: 88%; }
   .bubble.user { background: #EFEDE6; align-self: flex-end; color: #3D3929; }
-  .bubble.user .pasted { background: #fff; border: .5px solid var(--ios-line); border-radius: 6px; padding: 4px; margin-bottom: 6px; }
-  .bubble.user .pasted svg { width: 100%; height: 54px; }
-  .bubble.ai { background: transparent; color: #3D3929; }
-  .claude-input { margin: 0 14px 14px; border: 1px solid #D9D5C9; border-radius: 12px; padding: 8px 12px; font-size: 11px; color: #8E8B80; background: #fff; }
+  .bubble.user .pasted { background: #fff; border: 1px solid #E3DFD2; border-radius: 8px; padding: 5px; margin-bottom: 7px; }
+  .bubble.user .pasted svg { width: 100%; height: 56px; }
+  .bubble.ai { color: #3D3929; }
+  .claude-input { margin: 0 14px 14px; border: 1.5px solid #D9D5C9; border-radius: 14px; padding: 9px 12px; font-size: 11px; color: #8E8B80; background: #fff; }
 
-  .callouts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-  .co { font-size: 12.5px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
-  .co b { color: var(--ios-blue); }
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 20px; }
+  .co { font-size: 12.5px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .co b { display: block; margin-bottom: 4px; }
+  .co.a b { color: var(--coral); }
+
+  @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
 </style>
 
 <main>
-  <p class="eyebrow">InkAsk · HTML 디자인 목업 v2</p>
-  <h1>아이패드 전제 하이파이 목업</h1>
-  <p class="sub">굿노트·플렉슬·노타빌리티의 공통 문법(상단 크롬 + 회색 배경 위 흰 페이지 + 시스템 블루, 미니멀 아이콘, 플로팅 펜 팔레트)을 따르되, 기능이 3개뿐인 앱답게 더 비웠다.</p>
+  <p class="wordmark">Ink<em>Ask</em></p>
+  <h1>조용한 잉크, 물을 때만 <em>코랄</em></h1>
+  <p class="sub">필기앱들이 다 비슷한 이유는 색이 아무 말도 안 하기 때문. InkAsk는 규칙 하나로 성격을 만든다 — 화면 전체는 웜 페이퍼와 잉크 네이비로 가라앉혀 두고, <b>"Claude에 묻는 행위"에 관련된 것만 코랄로 점등</b>한다. 영역 선택, 힌트, 묻기 버튼, 전부 같은 색. 사용자는 색만 보고도 "이건 AI로 가는 동작"임을 안다.</p>
+  <span class="principle">규칙: 잉크는 조용히, Ask만 코랄</span>
 
-  <h2>① 문서 목록</h2>
-  <p>iOS 라지 타이틀 + 카드 리스트. 행마다 페이지 미니 썸네일과 페이지 수. 기능은 가져오기·열기·스와이프 삭제뿐.</p>
+  <h2>문서 목록 — 책상 위 교재들</h2>
+  <p>플랫 리스트 대신 종이 질감 카드. 오늘 본 교재엔 코랄 배지. 가져오기는 점선 트레이로.</p>
   <div class="stage">
     <figure class="pad">
       <div class="ipad p-portrait">
         <div class="chrome">
           <span class="grow"></span>
-          <span class="ico" title="PDF 가져오기">＋</span>
+          <span class="ico ask" style="font-weight:800">＋</span>
         </div>
-        <div style="position:absolute; inset:44px 0 0 0;">
-          <div class="list-large-title">InkAsk</div>
+        <div style="position:absolute; inset:46px 0 0 0;">
+          <div class="list-title">Ink<em>Ask</em></div>
+          <div class="list-sub">필기하고, 잘라서, 물어보세요</div>
           <div class="cardlist">
             <div class="docrow">
-              <span class="thumb"><svg viewBox="0 0 22 30"><rect x="1" y="1" width="20" height="28" fill="#fff" stroke="#D0D0D5"/><line x1="4" y1="7" x2="18" y2="7" stroke="#C9C7C0" stroke-width="1.6"/><circle cx="11" cy="17" r="5" fill="none" stroke="#555" stroke-width="1"/></svg></span>
-              <span class="meta">선형대수학 3장<small>42쪽 · 오늘</small></span>
-              <span class="chev">›</span>
+              <span class="thumb"><svg viewBox="0 0 26 36"><rect x="1" y="1" width="24" height="34" fill="#fff" stroke="#DCD6C9"/><line x1="5" y1="8" x2="21" y2="8" stroke="#C9C4B8" stroke-width="1.8"/><circle cx="13" cy="20" r="6" fill="none" stroke="#555" stroke-width="1"/><path d="M6 30 C 10 25, 16 25, 20 29" fill="none" stroke="#D9534A" stroke-width="1.3"/></svg></span>
+              <span class="meta">선형대수학 3장<small>42쪽 · 필기 12쪽</small></span>
+              <span class="badge">오늘</span>
             </div>
             <div class="docrow">
-              <span class="thumb"><svg viewBox="0 0 22 30"><rect x="1" y="1" width="20" height="28" fill="#fff" stroke="#D0D0D5"/><line x1="4" y1="7" x2="18" y2="7" stroke="#C9C7C0" stroke-width="1.6"/><line x1="4" y1="12" x2="18" y2="12" stroke="#C9C7C0" stroke-width="1.6"/><path d="M5 24 C 9 16, 14 16, 18 22" fill="none" stroke="#E2574C" stroke-width="1.2"/></svg></span>
-              <span class="meta">회로이론 기출<small>18쪽 · 어제</small></span>
-              <span class="chev">›</span>
+              <span class="thumb"><svg viewBox="0 0 26 36"><rect x="1" y="1" width="24" height="34" fill="#fff" stroke="#DCD6C9"/><line x1="5" y1="8" x2="21" y2="8" stroke="#C9C4B8" stroke-width="1.8"/><line x1="5" y1="14" x2="21" y2="14" stroke="#C9C4B8" stroke-width="1.8"/><path d="M6 28 L11 22 L15 26 L20 19" fill="none" stroke="#555" stroke-width="1.1"/></svg></span>
+              <span class="meta">회로이론 기출<small>18쪽 · 필기 7쪽</small></span>
             </div>
             <div class="docrow">
-              <span class="thumb"><svg viewBox="0 0 22 30"><rect x="1" y="1" width="20" height="28" fill="#fff" stroke="#D0D0D5"/><line x1="4" y1="8" x2="18" y2="8" stroke="#C9C7C0" stroke-width="1.6"/><line x1="4" y1="13" x2="14" y2="13" stroke="#C9C7C0" stroke-width="1.6"/></svg></span>
-              <span class="meta">전공 강의노트 7주차<small>36쪽 · 7월 27일</small></span>
-              <span class="chev">›</span>
+              <span class="thumb"><svg viewBox="0 0 26 36"><rect x="1" y="1" width="24" height="34" fill="#fff" stroke="#DCD6C9"/><line x1="5" y1="9" x2="21" y2="9" stroke="#C9C4B8" stroke-width="1.8"/><line x1="5" y1="15" x2="16" y2="15" stroke="#C9C4B8" stroke-width="1.8"/></svg></span>
+              <span class="meta">전공 강의노트 7주차<small>36쪽 · 필기 없음</small></span>
             </div>
           </div>
-          <div class="fab-note">행을 왼쪽으로 밀면 삭제</div>
+          <div class="importbtn">＋ 파일 앱에서 PDF 가져오기</div>
         </div>
       </div>
-      <figcaption><b>변경점:</b> 행에 미니 썸네일·페이지 수·최근 열람이 추가돼 "내 교재"라는 느낌을 줌. (썸네일은 2라운드 — MVP는 아이콘)</figcaption>
+      <figcaption><b>워드마크가 곧 로고.</b> "Ink"는 굵은 네이비, "Ask"만 코랄 이탤릭 — 앱 이름 자체가 색 규칙을 선언한다.</figcaption>
     </figure>
   </div>
 
-  <h2>② 필기 화면 — 기본</h2>
-  <p>크롬은 1줄로 끝. 펜 도구는 시스템 PKToolPicker 플로팅 팔레트에 위임 — 굿노트식 커스텀 툴바를 안 만드는 게 이 앱의 선택이다.</p>
+  <h2>필기 화면 — 조용한 모드와 묻는 모드</h2>
+  <p>평소엔 잉크와 종이뿐(좌). [영역]을 켜는 순간 코랄이 화면에 들어온다(우) — 마칭 앤츠 점선, 코너 핸들, 힌트, 그리고 우하단 히어로 버튼.</p>
   <div class="stage">
     <figure class="pad">
       <div class="ipad p-portrait">
         <div class="chrome">
-          <span class="back">‹ 목록</span>
-          <span class="pageno">3 / 42</span>
+          <span class="back">‹</span>
+          <span class="doc">선형대수학 3장</span>
+          <span class="pageno">3/42</span>
           <span class="grow"></span>
           <span class="ico">‹</span><span class="ico">›</span>
-          <span class="ico">▢</span>
-          <span class="ico">⧉</span>
-          <span class="ico">↑</span>
+          <span class="ico ask">▢</span>
         </div>
         <div class="paper-wrap">
           <div class="paper">
@@ -201,11 +250,11 @@
             <div class="pline w60"></div>
             <div class="fig">
               <svg viewBox="0 0 200 90">
-                <circle cx="52" cy="45" r="30" fill="none" stroke="#444" stroke-width="1.4"/>
-                <path d="M52 15 L52 75 M22 45 L82 45" stroke="#999" stroke-width=".8"/>
-                <path d="M52 45 L74 27" stroke="#444" stroke-width="1.2" marker-end="none"/>
-                <path d="M105 70 C 125 25, 155 25, 178 62" fill="none" stroke="#E2574C" stroke-width="2.2" stroke-linecap="round"/>
-                <path d="M110 34 q 9 -11 17 -2 q 6 7 -4 11" fill="none" stroke="#E2574C" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="52" cy="45" r="30" fill="none" stroke="#3A404E" stroke-width="1.4"/>
+                <path d="M52 15 L52 75 M22 45 L82 45" stroke="#A6ABB6" stroke-width=".8"/>
+                <path d="M52 45 L74 27" stroke="#3A404E" stroke-width="1.2"/>
+                <path d="M105 70 C 125 25, 155 25, 178 62" fill="none" stroke="#D9534A" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M110 34 q 9 -11 17 -2 q 6 7 -4 11" fill="none" stroke="#D9534A" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="pline"></div>
@@ -215,20 +264,59 @@
         <div class="toolpicker">
           <span class="pen k sel"></span><span class="pen r"></span><span class="pen hl"></span><span class="pen er"></span>
         </div>
+        <div class="askpill"><span class="star">✳</span> Claude에 묻기</div>
       </div>
-      <figcaption><b>필기 모드.</b> 붉은 선이 펜슬 필기. 하단 팔레트는 iPadOS가 그려주는 실물이며 드래그로 이동·최소화 가능. 키보드 있으면 ←/→ 페이지, ⌘C 복사.</figcaption>
+      <figcaption><b>조용한 모드.</b> 도트 그리드 종이, 잉크 네이비 크롬. 코랄은 우하단 "Claude에 묻기" 하나뿐 — 선택 없이 누르면 페이지 전체가 간다.</figcaption>
     </figure>
 
     <figure class="pad">
       <div class="ipad p-portrait">
         <div class="chrome">
-          <span class="back">‹ 목록</span>
-          <span class="pageno">3 / 42</span>
+          <span class="back">‹</span>
+          <span class="doc">선형대수학 3장</span>
+          <span class="pageno">3/42</span>
           <span class="grow"></span>
           <span class="ico">‹</span><span class="ico">›</span>
           <span class="ico on">▣</span>
-          <span class="ico" style="font-weight:700">⧉</span>
-          <span class="ico">↑</span>
+        </div>
+        <div class="hint">자를 영역을 드래그하세요</div>
+        <div class="paper-wrap">
+          <div class="paper">
+            <h4>3.2 고유값과 고유벡터</h4>
+            <div class="pline"></div>
+            <div class="pline w60"></div>
+            <div class="fig">
+              <svg viewBox="0 0 200 90">
+                <circle cx="52" cy="45" r="30" fill="none" stroke="#3A404E" stroke-width="1.4"/>
+                <path d="M52 15 L52 75 M22 45 L82 45" stroke="#A6ABB6" stroke-width=".8"/>
+                <path d="M105 70 C 125 25, 155 25, 178 62" fill="none" stroke="#D9534A" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+              <div class="marquee" style="left:2%; top:-5%; width:47%; height:110%;">
+                <i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i>
+              </div>
+            </div>
+            <div class="pline"></div>
+            <div class="pline w60"></div>
+          </div>
+        </div>
+        <div class="askpill"><span class="star">✳</span> 이 영역 묻기</div>
+      </div>
+      <figcaption><b>묻는 모드.</b> 버튼 라벨이 "이 영역 묻기"로 바뀐다 — 상태를 말로 알려주는 버튼. 탭하면 복사(햅틱) 후 공유 시트.</figcaption>
+    </figure>
+  </div>
+
+  <h2>다크 모드 — 밤 도서관</h2>
+  <p>단순 반전이 아니라 종이를 "짙은 남색 노트"로. 잉크는 밝은 회백, 코랄은 그대로 — 어두울수록 더 잘 보이는 색이라 규칙이 유지된다.</p>
+  <div class="stage">
+    <figure class="pad">
+      <div class="ipad dark p-portrait">
+        <div class="chrome">
+          <span class="back">‹</span>
+          <span class="doc">선형대수학 3장</span>
+          <span class="pageno">3/42</span>
+          <span class="grow"></span>
+          <span class="ico">‹</span><span class="ico">›</span>
+          <span class="ico ask">▢</span>
         </div>
         <div class="paper-wrap">
           <div class="paper">
@@ -237,53 +325,53 @@
             <div class="pline w60"></div>
             <div class="fig">
               <svg viewBox="0 0 200 90">
-                <circle cx="52" cy="45" r="30" fill="none" stroke="#444" stroke-width="1.4"/>
-                <path d="M52 15 L52 75 M22 45 L82 45" stroke="#999" stroke-width=".8"/>
-                <path d="M105 70 C 125 25, 155 25, 178 62" fill="none" stroke="#E2574C" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="52" cy="45" r="30" fill="none" stroke="#AEB4C2" stroke-width="1.4"/>
+                <path d="M52 15 L52 75 M22 45 L82 45" stroke="#5A6070" stroke-width=".8"/>
+                <path d="M105 70 C 125 25, 155 25, 178 62" fill="none" stroke="#E2685C" stroke-width="2.2" stroke-linecap="round"/>
               </svg>
-              <div class="marquee" style="left:2%; top:-4%; width:46%; height:108%;">
-                <i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i>
-              </div>
             </div>
             <div class="pline"></div>
             <div class="pline w60"></div>
           </div>
         </div>
-        <div class="hint">자를 영역을 드래그하세요</div>
+        <div class="toolpicker">
+          <span class="pen k sel" style="background:#D6D9E2"></span><span class="pen r"></span><span class="pen hl"></span>
+        </div>
+        <div class="askpill"><span class="star">✳</span> Claude에 묻기</div>
       </div>
-      <figcaption><b>영역 선택 모드.</b> [▣]이 파랗게 점등, 상단에 힌트 캡슐. 사각형에 코너 핸들을 넣어 "선택됨"을 명확히. 이 상태로 [⧉ 복사]하면 선택 영역만 클립보드로.</figcaption>
+      <figcaption><b>다크.</b> PDF 원본은 흰 배경이므로 실제 구현에선 페이지만 밝게 남고 주변 크롬이 어두워지는 형태 — 목업은 "노트 모드"(원본 반전)라는 2라운드 옵션까지 그려본 것.</figcaption>
     </figure>
   </div>
 
-  <h2>③ 진짜 사용 장면 — Claude와 스플릿뷰</h2>
-  <p>이 앱의 기준 시나리오. 왼쪽 InkAsk에서 도형을 잘라 복사하고, 오른쪽 Claude에 붙여넣어 질문한다.</p>
+  <h2>기준 시나리오 — Claude와 나란히</h2>
   <div class="stage">
     <figure class="pad">
       <div class="ipad p-land">
         <div class="split">
           <div class="left">
             <div class="chrome">
-              <span class="pageno">3 / 42</span>
+              <span class="doc" style="font-size:11px">선형대수학</span>
+              <span class="pageno">3/42</span>
               <span class="grow"></span>
-              <span class="ico on" style="width:24px;height:24px;font-size:12px;">▣</span>
-              <span class="ico" style="width:24px;height:24px;font-size:12px;">⧉</span>
+              <span class="ico on" style="width:24px;height:24px;font-size:11px;">▣</span>
             </div>
             <div class="paper-wrap">
               <div class="paper" style="width:86%;">
-                <div class="pline" style="margin-top:16px;"></div>
-                <div class="fig" style="height:46%;">
+                <div class="pline" style="margin-top:18px;"></div>
+                <div class="fig" style="height:44%;">
                   <svg viewBox="0 0 200 90">
-                    <circle cx="60" cy="45" r="32" fill="none" stroke="#444" stroke-width="1.4"/>
-                    <path d="M60 13 L60 77 M28 45 L92 45" stroke="#999" stroke-width=".8"/>
-                    <path d="M115 68 C 135 25, 160 28, 182 60" fill="none" stroke="#E2574C" stroke-width="2.2" stroke-linecap="round"/>
+                    <circle cx="60" cy="45" r="32" fill="none" stroke="#3A404E" stroke-width="1.4"/>
+                    <path d="M60 13 L60 77 M28 45 L92 45" stroke="#A6ABB6" stroke-width=".8"/>
+                    <path d="M115 68 C 135 25, 160 28, 182 60" fill="none" stroke="#D9534A" stroke-width="2.2" stroke-linecap="round"/>
                   </svg>
-                  <div class="marquee" style="left:4%; top:-2%; width:58%; height:104%;">
+                  <div class="marquee" style="left:4%; top:-3%; width:58%; height:106%;">
                     <i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i>
                   </div>
                 </div>
                 <div class="pline w60"></div>
               </div>
             </div>
+            <div class="askpill" style="right:10px; bottom:12px; padding:8px 13px; font-size:11px;"><span class="star">✳</span> 묻기</div>
           </div>
           <div class="right">
             <div class="claude-bar"><span class="claude-star">✳</span> Claude</div>
@@ -291,25 +379,25 @@
               <div class="bubble user">
                 <div class="pasted">
                   <svg viewBox="0 0 120 54">
-                    <circle cx="34" cy="27" r="20" fill="none" stroke="#444" stroke-width="1.2"/>
-                    <path d="M34 7 L34 47 M14 27 L54 27" stroke="#999" stroke-width=".7"/>
+                    <circle cx="34" cy="27" r="20" fill="none" stroke="#3A404E" stroke-width="1.2"/>
+                    <path d="M34 7 L34 47 M14 27 L54 27" stroke="#A6ABB6" stroke-width=".7"/>
                   </svg>
                 </div>
-                이 그림에서 단위원과 축이 왜 이렇게 그려지는지 설명해줘
+                이 그림에서 단위원이 변환 후 타원이 되는 이유를 설명해줘
               </div>
-              <div class="bubble ai">좋은 질문이에요. 이 그림은 고유벡터의 방향이 변환 후에도 유지되는 걸 보여주는데…</div>
+              <div class="bubble ai">좋은 질문이에요. 행렬 A가 단위원 위의 벡터들을 변환하면, 각 방향으로 늘어나는 정도가 달라서…</div>
             </div>
             <div class="claude-input">Claude에게 메시지 보내기…</div>
           </div>
         </div>
       </div>
-      <figcaption><b>스플릿뷰 시나리오.</b> 절반 폭(≈507pt)에서 크롬이 아이콘만으로 줄고 페이지는 폭 맞춤. 복사 → 붙여넣기 왕복이 화면 전환 없이 끝난다.</figcaption>
+      <figcaption><b>절반 폭에서도 히어로 버튼은 살아남는다</b> — 라벨만 "묻기"로 줄임. 잘린 도형이 그대로 오른쪽 대화에 붙는 것이 이 앱의 전부다.</figcaption>
     </figure>
   </div>
 
-  <div class="callouts">
-    <div class="co"><b>MVP에 반영됨</b> — 크롬 1줄 · 회색 배경+종이 그림자 · 파란 선택 사각형 · 힌트 캡슐 · 단축키</div>
-    <div class="co"><b>이 목업에서 새로 제안</b> — 목록 행 미니 썸네일·페이지 수, 선택 사각형 코너 핸들, 문서명 크롬 표시</div>
-    <div class="co"><b>2라운드 후보</b> — 크롬 자동 숨김(몰입 모드), 페이지 썸네일 그리드</div>
+  <div class="legend">
+    <div class="co a"><b>Swift 반영 대상 (승인 시)</b>복사+공유 → "Claude에 묻기" 히어로 필 버튼 통합 · 코랄 액센트 · 선택 사각형 코너 핸들 · 크롬에 문서명 · 목록 카드화+배지</div>
+    <div class="co"><b>목업만의 표현</b>도트 그리드 종이(실제론 PDF 원본이 종이) · 미니 썸네일(2라운드) · 다크 "노트 모드"(2라운드)</div>
+    <div class="co"><b>변하지 않는 것</b>펜 도구는 시스템 PKToolPicker · 서버 0원 · 화면 2개</div>
   </div>
 </main>
