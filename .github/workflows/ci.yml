@@ -10,10 +10,10 @@ jobs:
         run: |
           DEVICE=$(xcrun simctl list devices available | grep -m1 -o 'iPhone [^(]*' | xargs)
           echo "Using simulator: $DEVICE"
+          export TEST_RUNNER_SNAPSHOT_DIR="$PWD/snapshots"
           xcodebuild -scheme InkAskKit \
             -destination "platform=iOS Simulator,name=$DEVICE" \
-            test CODE_SIGNING_ALLOWED=NO \
-            TEST_RUNNER_SNAPSHOT_DIR="$PWD/snapshots"
+            test CODE_SIGNING_ALLOWED=NO
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
