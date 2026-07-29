@@ -1,6 +1,7 @@
 import XCTest
 import SwiftUI
 import PDFKit
+import PencilKit
 import UIKit
 @testable import InkAskKit
 
@@ -71,5 +72,20 @@ final class SnapshotTests: XCTestCase {
                  name: "03-note-landscape", size: CGSize(width: 1194, height: 834))
         try save(NavigationStack { NoteView(pdfURL: pdfURL) },
                  name: "04-note-splitview", size: CGSize(width: 507, height: 834))
+    }
+
+    // ✨ Ask 시트 (시트 프레젠테이션은 오프스크린 캡처 불가라 뷰로 직접 렌더)
+    func testSnapshotAskSheet() throws {
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("snap-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let pdfURL = try makeSamplePDF(in: folder)
+        let page = PDFDocument(url: pdfURL)!.page(at: 0)!
+        let img = PageExporter.composite(
+            page: page, drawing: PKDrawing(),
+            crop: CGRect(x: 80, y: 150, width: 640, height: 400))
+        try save(AskSheet(image: img), name: "05-ask-sheet",
+                 size: CGSize(width: 540, height: 520))
     }
 }
