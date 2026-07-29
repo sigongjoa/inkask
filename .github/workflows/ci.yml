@@ -1,0 +1,13 @@
+name: compile-check
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Type-check for iOS Simulator
+        run: >
+          xcodebuild -scheme InkAskKit
+          -destination 'generic/platform=iOS Simulator'
+          build CODE_SIGNING_ALLOWED=NO

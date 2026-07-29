@@ -10,6 +10,7 @@
 4. 실행(▶). 홈 화면 설치는 프로젝트 공유 메뉴의 "App 설치" 사용.
 
 주의: Package.swift는 Playgrounds가 만든 것을 그대로 둘 것.
+(리포 루트의 Package.swift는 GitHub Actions 컴파일 체크 전용 — 아이패드로 복사 금지.)
 
 ## 검증 체크리스트 (설치 후 순서대로)
 1. [ ] PDF 가져오기 → 목록에 표시됨
