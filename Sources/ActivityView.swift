@@ -7,9 +7,9 @@ struct ShareImage: Identifiable {
 }
 
 struct ActivityView: UIViewControllerRepresentable {
-    let image: UIImage
+    let items: [Any]
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
     func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
 }

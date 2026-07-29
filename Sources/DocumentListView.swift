@@ -25,7 +25,7 @@ struct DocumentListView: View {
                 docs = FileStore.listDocuments()
             }
         }
-        .listStyle(.insetGrouped)
+        .listStyle(.plain)
         .overlay {
             if docs.isEmpty {
                 ContentUnavailableView {

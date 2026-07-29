@@ -11,11 +11,11 @@ struct NoteView: View {
     @State private var pageImage: UIImage?
     @State private var selecting = false
     @State private var selRect: CGRect?
-    @State private var copied = false
-    @State private var shareItem: ShareImage?
+    @State private var askImage: ShareImage?
 
     private var page: PDFPage? { doc?.page(at: pageIndex) }
     private var pageCount: Int { doc?.pageCount ?? 0 }
+    private var docName: String { pdfURL.deletingLastPathComponent().lastPathComponent }
 
     var body: some View {
         Group {
@@ -35,8 +35,6 @@ struct NoteView: View {
                     .frame(width: size.width, height: size.height)
                     .scaleEffect(fit, anchor: .topLeading)
                     .frame(width: size.width * fit, height: size.height * fit, alignment: .topLeading)
-                    .shadow(color: .black.opacity(0.18), radius: 10, y: 3)
-                    .padding(.top, 12)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .overlay(alignment: .top) {
                         if selecting && selRect == nil {
@@ -45,48 +43,42 @@ struct NoteView: View {
                                 .padding(.horizontal, 14)
                                 .padding(.vertical, 7)
                                 .background(.regularMaterial, in: Capsule())
-                                .padding(.top, 28)
+                                .padding(.top, 20)
                         }
                     }
                 }
-                .background(Color(.secondarySystemBackground).ignoresSafeArea())
+                .background(Color.white.ignoresSafeArea())
             } else {
                 ContentUnavailableView("PDF를 열 수 없습니다", systemImage: "exclamationmark.triangle")
             }
         }
-        .navigationTitle("\(pageIndex + 1) / \(pageCount)")
+        .navigationTitle(docName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
+                Text("\(pageIndex + 1)/\(pageCount)")
+                    .font(.footnote.monospacedDigit())
+                    .foregroundStyle(.secondary)
                 Button("이전 페이지", systemImage: "chevron.left") { go(-1) }
                     .disabled(pageIndex <= 0)
                     .keyboardShortcut(.leftArrow, modifiers: [])
                 Button("다음 페이지", systemImage: "chevron.right") { go(1) }
                     .disabled(pageIndex >= pageCount - 1)
                     .keyboardShortcut(.rightArrow, modifiers: [])
-                Button("영역 선택", systemImage: selecting ? "rectangle.dashed.badge.record" : "rectangle.dashed") {
+                Button("영역 선택", systemImage: "rectangle.dashed") {
                     selecting.toggle()
                     if !selecting { selRect = nil }
                 }
+                .background(selecting ? Color.blue.opacity(0.15) : Color.clear,
+                            in: RoundedRectangle(cornerRadius: 6))
                 .keyboardShortcut("e", modifiers: [])
-                Button("복사", systemImage: copied ? "checkmark" : "doc.on.doc") {
-                    guard let page else { return }
-                    UIPasteboard.general.image =
-                        PageExporter.composite(page: page, drawing: drawing, crop: selRect)
-                    UINotificationFeedbackGenerator().notificationOccurred(.success)
-                    copied = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
-                }
-                .keyboardShortcut("c", modifiers: [.command])
-                Button("공유", systemImage: "square.and.arrow.up") {
-                    guard let page else { return }
-                    shareItem = ShareImage(image:
-                        PageExporter.composite(page: page, drawing: drawing, crop: selRect))
-                }
+                Button("Claude에 묻기", systemImage: "sparkles") { ask() }
+                    .keyboardShortcut("c", modifiers: [.command])
             }
         }
-        .sheet(item: $shareItem) { item in
-            ActivityView(image: item.image)
+        .sheet(item: $askImage) { item in
+            AskSheet(image: item.image)
+                .presentationDetents([.medium, .large])
         }
         .onAppear {
             doc = PDFDocument(url: pdfURL)
@@ -102,10 +94,19 @@ struct NoteView: View {
             Color.black.opacity(0.001)  // 드래그 입력을 받기 위한 히트 영역
             if let r = selRect {
                 Rectangle()
-                    .stroke(Color.blue, lineWidth: 2)
-                    .background(Color.blue.opacity(0.1))
+                    .strokeBorder(Color.blue, style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                    .background(Color.blue.opacity(0.06))
                     .frame(width: r.width, height: r.height)
                     .position(x: r.midX, y: r.midY)
+                let corners = [CGPoint(x: r.minX, y: r.minY), CGPoint(x: r.maxX, y: r.minY),
+                               CGPoint(x: r.minX, y: r.maxY), CGPoint(x: r.maxX, y: r.maxY)]
+                ForEach(0..<4, id: \.self) { i in
+                    Circle()
+                        .fill(Color.white)
+                        .overlay(Circle().stroke(Color.blue, lineWidth: 2))
+                        .frame(width: 10, height: 10)
+                        .position(corners[i])
+                }
             }
         }
         .gesture(
@@ -117,6 +118,12 @@ struct NoteView: View {
                                      width: abs(a.x - b.x), height: abs(a.y - b.y))
                 }
         )
+    }
+
+    private func ask() {
+        guard let page else { return }
+        askImage = ShareImage(image:
+            PageExporter.composite(page: page, drawing: drawing, crop: selRect))
     }
 
     private func loadPage() {
