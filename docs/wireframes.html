@@ -1,0 +1,335 @@
+<title>InkAsk — 와이어프레임 & 유즈케이스</title>
+<style>
+  :root {
+    --paper: #FAF8F3;
+    --paper-2: #F1EEE6;
+    --ink: #1D2433;
+    --ink-2: #5A6272;
+    --line: #DAD5CA;
+    --accent: #2E6DB4;
+    --accent-soft: rgba(46, 109, 180, 0.10);
+    --hl: #F5C84C;
+    --frame-bg: #FFFFFF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #171A21;
+      --paper-2: #1F232D;
+      --ink: #E8E6E0;
+      --ink-2: #9BA1AE;
+      --line: #343945;
+      --accent: #6FA5DC;
+      --accent-soft: rgba(111, 165, 220, 0.14);
+      --frame-bg: #242935;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #171A21;
+    --paper-2: #1F232D;
+    --ink: #E8E6E0;
+    --ink-2: #9BA1AE;
+    --line: #343945;
+    --accent: #6FA5DC;
+    --accent-soft: rgba(111, 165, 220, 0.14);
+    --frame-bg: #242935;
+  }
+  :root[data-theme="light"] {
+    --paper: #FAF8F3;
+    --paper-2: #F1EEE6;
+    --ink: #1D2433;
+    --ink-2: #5A6272;
+    --line: #DAD5CA;
+    --accent: #2E6DB4;
+    --accent-soft: rgba(46, 109, 180, 0.10);
+    --frame-bg: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Apple SD Gothic Neo", Pretendard, "Malgun Gothic", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 1020px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .eyebrow {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin: 0 0 8px;
+  }
+  h1 { font-size: 34px; line-height: 1.25; margin: 0 0 6px; text-wrap: balance; }
+  .sub { color: var(--ink-2); margin: 0 0 12px; max-width: 62ch; }
+  h2 {
+    font-size: 21px; margin: 64px 0 6px; padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  h2 + p.sub { margin-bottom: 24px; }
+
+  /* ---- wireframe frames ---- */
+  .frames { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  figure.device { margin: 0; flex: 1 1 300px; max-width: 460px; }
+  .ipad {
+    background: var(--frame-bg);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--line);
+  }
+  figcaption { font-size: 13px; color: var(--ink-2); margin-top: 10px; }
+  figcaption b { color: var(--ink); }
+
+  .navbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-bottom: 1px solid var(--line);
+    font-size: 12.5px; min-height: 38px;
+  }
+  .navbar .title { font-weight: 700; }
+  .spacer { flex: 1; }
+  .btn {
+    border: 1.5px solid var(--ink-2); border-radius: 7px;
+    padding: 2px 8px; font-size: 11.5px; white-space: nowrap; color: var(--ink);
+  }
+  .btn.primary { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .btn.active { background: var(--accent); border-color: var(--accent); color: var(--frame-bg); font-weight: 700; }
+
+  .rows { padding: 4px 0 40px; }
+  .row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 13px;
+  }
+  .row .chev { margin-left: auto; color: var(--ink-2); }
+  .doc-ico { width: 20px; height: 26px; border: 1.5px solid var(--ink-2); border-radius: 3px; flex: none; }
+
+  .page-area { position: relative; padding: 14px 18px 10px; }
+  .pdf-line { height: 7px; background: var(--paper-2); border-radius: 3px; margin: 9px 0; }
+  .pdf-line.w60 { width: 60%; }
+  .pdf-line.w80 { width: 80%; }
+  .diagram {
+    position: relative;
+    border: 1.5px solid var(--ink-2); border-radius: 4px;
+    height: 110px; margin: 12px 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .diagram svg { width: 88%; height: 88%; }
+  .toolpicker {
+    margin: 10px auto 12px; width: 68%;
+    border: 1.5px solid var(--line); border-radius: 10px;
+    display: flex; justify-content: center; gap: 14px;
+    padding: 6px 10px; font-size: 11px; color: var(--ink-2);
+  }
+  .pen-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--ink-2); }
+  .pen-dot.sel { background: var(--ink); border-color: var(--ink); }
+
+  .sel-rect {
+    position: absolute; border: 2px solid var(--accent);
+    background: var(--accent-soft); border-radius: 2px;
+  }
+  .callout {
+    position: absolute; font-size: 11px; color: var(--accent); font-weight: 700;
+    background: var(--paper); border: 1px solid var(--accent);
+    border-radius: 6px; padding: 2px 7px; white-space: nowrap;
+  }
+
+  /* ---- flow strip ---- */
+  .flow { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; margin-top: 20px; }
+  .flow-step {
+    flex: 1 1 180px; background: var(--frame-bg);
+    border: 1.5px solid var(--line); border-radius: 10px; padding: 14px 16px;
+    position: relative; font-size: 13.5px;
+  }
+  .flow-step .n {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.1em; display: block; margin-bottom: 4px;
+  }
+  .flow-step b { display: block; margin-bottom: 3px; }
+  .flow-step small { color: var(--ink-2); line-height: 1.5; display: block; }
+
+  /* ---- use cases ---- */
+  .uc {
+    background: var(--frame-bg); border: 1.5px solid var(--line);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  .uc.core { border-color: var(--accent); box-shadow: 4px 4px 0 var(--accent-soft); }
+  .uc-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .uc-id { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; }
+  .uc h3 { font-size: 16.5px; margin: 0; }
+  .tag {
+    font-size: 11px; border: 1px solid var(--line); border-radius: 99px;
+    padding: 1px 9px; color: var(--ink-2); margin-left: auto;
+  }
+  .uc.core .tag { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .uc dl { display: grid; grid-template-columns: 64px 1fr; gap: 4px 14px; margin: 10px 0 0; font-size: 14px; }
+  .uc dt { color: var(--ink-2); font-size: 12.5px; padding-top: 2px; }
+  .uc dd { margin: 0; }
+  .uc dd ol { margin: 0; padding-left: 18px; }
+  .uc dd ol li { margin: 2px 0; }
+  .check { font-size: 12.5px; color: var(--ink-2); }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin-top: 16px; }
+  th, td { border: 1px solid var(--line); padding: 7px 12px; text-align: left; }
+  th { background: var(--paper-2); font-size: 12.5px; }
+  td:first-child { white-space: nowrap; font-weight: 700; color: var(--accent); }
+</style>
+
+<main>
+  <p class="eyebrow">InkAsk · 설계 문서</p>
+  <h1>와이어프레임 & 유즈케이스</h1>
+  <p class="sub">개인용 아이패드 앱. PDF에 애플펜슬로 필기하고, 이해 안 되는 도형·수식 영역을 드래그로 잘라 두 탭 만에 Claude에 넘긴다. 화면은 단 두 개.</p>
+
+  <h2>화면 1 — 문서 목록</h2>
+  <p class="sub">앱 시작 화면. 파일 앱에서 PDF를 가져오면 목록에 쌓인다. 스와이프로 삭제.</p>
+  <div class="frames">
+    <figure class="device">
+      <div class="ipad">
+        <div class="navbar">
+          <span class="title">InkAsk</span>
+          <span class="spacer"></span>
+          <span class="btn primary">＋ PDF 가져오기</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="doc-ico"></span> 선형대수학 3장 <span class="chev">›</span></div>
+          <div class="row"><span class="doc-ico"></span> 회로이론 기출 <span class="chev">›</span></div>
+          <div class="row"><span class="doc-ico"></span> 전공 강의노트 7주차 <span class="chev">›</span></div>
+        </div>
+      </div>
+      <figcaption><b>DocumentListView.</b> 비어 있으면 "PDF를 가져오세요" 안내만. 폴더·태그·검색 없음 — 개인용이라 목록이 길어질 일이 없다.</figcaption>
+    </figure>
+  </div>
+
+  <h2>화면 2 — 필기 화면</h2>
+  <p class="sub">PDF 페이지 위에 투명 캔버스. 펜을 떼는 순간마다 자동 저장이라 저장 버튼이 없다. 좌: 기본 필기 모드 / 우: 영역 선택 모드.</p>
+  <div class="frames">
+    <figure class="device">
+      <div class="ipad">
+        <div class="navbar">
+          <span>‹</span>
+          <span class="title">3 / 42</span>
+          <span class="spacer"></span>
+          <span class="btn">←</span><span class="btn">→</span>
+          <span class="btn">▢ 영역</span>
+          <span class="btn">복사</span>
+          <span class="btn">공유</span>
+        </div>
+        <div class="page-area">
+          <div class="pdf-line w80"></div>
+          <div class="pdf-line"></div>
+          <div class="diagram">
+            <svg viewBox="0 0 200 80" aria-label="교재 도형 예시">
+              <circle cx="55" cy="40" r="26" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M55 14 L55 66 M29 40 L81 40" stroke="currentColor" stroke-width="1"/>
+              <path d="M100 62 C 120 20, 150 20, 172 55" fill="none" stroke="#C0392B" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M104 30 q 8 -10 16 -2 q 6 6 -3 10" fill="none" stroke="#C0392B" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="pdf-line w60"></div>
+          <div class="pdf-line w80"></div>
+          <div class="toolpicker">
+            <span class="pen-dot sel"></span><span class="pen-dot"></span><span class="pen-dot"></span><span>지우개</span>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>NoteView — 필기 모드.</b> 붉은 선이 내 펜슬 필기. 하단은 시스템 PKToolPicker(펜·형광펜·지우개). 페이지 이동은 ←/→.</figcaption>
+    </figure>
+
+    <figure class="device">
+      <div class="ipad">
+        <div class="navbar">
+          <span>‹</span>
+          <span class="title">3 / 42</span>
+          <span class="spacer"></span>
+          <span class="btn">←</span><span class="btn">→</span>
+          <span class="btn active">▣ 영역</span>
+          <span class="btn primary">복사</span>
+          <span class="btn primary">공유</span>
+        </div>
+        <div class="page-area">
+          <div class="pdf-line w80"></div>
+          <div class="pdf-line"></div>
+          <div class="diagram">
+            <svg viewBox="0 0 200 80" aria-label="교재 도형 예시">
+              <circle cx="55" cy="40" r="26" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M55 14 L55 66 M29 40 L81 40" stroke="currentColor" stroke-width="1"/>
+              <path d="M100 62 C 120 20, 150 20, 172 55" fill="none" stroke="#C0392B" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <div class="sel-rect" style="left: 8%; top: 4%; width: 52%; height: 92%;"></div>
+            <div class="callout" style="right: -6px; top: -14px;">드래그로 영역 지정</div>
+          </div>
+          <div class="pdf-line w60"></div>
+          <div class="pdf-line w80"></div>
+          <div class="toolpicker" style="opacity:.4">
+            <span class="pen-dot sel"></span><span class="pen-dot"></span><span class="pen-dot"></span><span>지우개</span>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>NoteView — 영역 선택 모드.</b> [영역] 토글 후 사각형 드래그. 이 상태로 [복사]/[공유]하면 선택 부분만(필기 포함) 나간다. 선택 없이 누르면 페이지 전체.</figcaption>
+    </figure>
+  </div>
+
+  <h2>핵심 플로우 — 도형을 Claude에게 묻기까지</h2>
+  <div class="flow">
+    <div class="flow-step"><span class="n">STEP 1</span><b>공부하다 막힘</b><small>교재 도형/수식이 이해 안 됨. 지금까지: 스크린샷 → 사진앱 → 크롭 → 업로드.</small></div>
+    <div class="flow-step"><span class="n">STEP 2</span><b>영역 드래그</b><small>[영역] 탭 → 도형 위로 사각형 드래그. 내 필기 메모도 같이 담긴다.</small></div>
+    <div class="flow-step"><span class="n">STEP 3</span><b>복사 or 공유</b><small>[복사] 후 Claude에 붙여넣기, 또는 [공유] → 공유 시트에서 Claude 선택.</small></div>
+    <div class="flow-step"><span class="n">STEP 4</span><b>질문</b><small>"이 그림에서 왜 이렇게 되는지 설명해줘" — 총 2~3탭, 앱 전환 한 번.</small></div>
+  </div>
+
+  <h2>유즈케이스</h2>
+  <p class="sub">UC-3이 이 앱의 존재 이유. 나머지는 그걸 받치는 최소한의 흐름이다.</p>
+
+  <div class="uc">
+    <div class="uc-head"><span class="uc-id">UC-1</span><h3>새 교재 넣기</h3><span class="tag">화면 1</span></div>
+    <dl>
+      <dt>트리거</dt><dd>새 학기 교재·기출 PDF가 생김</dd>
+      <dt>흐름</dt><dd><ol><li>[＋ PDF 가져오기] → 파일 앱에서 선택</li><li>목록에 표시, 탭하면 필기 화면</li></ol></dd>
+      <dt>검증</dt><dd class="check">체크리스트 1번</dd>
+    </dl>
+  </div>
+
+  <div class="uc">
+    <div class="uc-head"><span class="uc-id">UC-2</span><h3>공부하며 필기</h3><span class="tag">화면 2</span></div>
+    <dl>
+      <dt>트리거</dt><dd>평소 공부. 밑줄, 풀이, 메모</dd>
+      <dt>흐름</dt><dd><ol><li>펜슬로 쓴다 — 그게 전부 (자동 저장)</li><li>←/→로 페이지 이동, 필기는 페이지별 유지</li></ol></dd>
+      <dt>검증</dt><dd class="check">체크리스트 2·3·7번 (강제 종료 후 복원, 페이지 이동, 회전)</dd>
+    </dl>
+  </div>
+
+  <div class="uc core">
+    <div class="uc-head"><span class="uc-id">UC-3</span><h3>도형이 이해 안 됨 → 잘라서 Claude에 질문</h3><span class="tag">핵심</span></div>
+    <dl>
+      <dt>트리거</dt><dd>교재의 도형·그래프·수식이 글로 설명하기 애매함</dd>
+      <dt>흐름</dt><dd><ol><li>[영역] 탭 → 도형 위로 드래그</li><li>[복사] → Claude 앱에서 붙여넣기 (또는 [공유] → Claude)</li><li>질문 입력. 내 필기 흔적도 이미지에 포함되어 맥락 전달</li></ol></dd>
+      <dt>결과</dt><dd>스크린샷·다운로드·크롭 3단계 마찰이 2탭으로 줄어듦</dd>
+      <dt>검증</dt><dd class="check">체크리스트 4·5·6번</dd>
+    </dl>
+  </div>
+
+  <div class="uc">
+    <div class="uc-head"><span class="uc-id">UC-4</span><h3>페이지 통째로 질문</h3><span class="tag">화면 2</span></div>
+    <dl>
+      <dt>트리거</dt><dd>"이 페이지 요약해줘", "내 풀이 검사해줘"</dd>
+      <dt>흐름</dt><dd><ol><li>영역 선택 없이 바로 [복사] 또는 [공유]</li><li>페이지 전체(원본+필기)가 나감</li></ol></dd>
+      <dt>검증</dt><dd class="check">체크리스트 4번</dd>
+    </dl>
+  </div>
+
+  <div class="uc">
+    <div class="uc-head"><span class="uc-id">UC-5</span><h3>이어서 공부</h3><span class="tag">화면 1→2</span></div>
+    <dl>
+      <dt>트리거</dt><dd>어제 하던 교재를 다시 폄</dd>
+      <dt>흐름</dt><dd><ol><li>목록에서 교재 탭</li><li>모든 페이지의 필기가 그대로 복원</li></ol></dd>
+      <dt>검증</dt><dd class="check">체크리스트 2번</dd>
+    </dl>
+  </div>
+
+  <h2>의도적으로 뺀 것</h2>
+  <table>
+    <tr><th>기능</th><th>왜 뺐나</th><th>다시 넣는 시점</th></tr>
+    <tr><td>줌/스크롤</td><td>화면 폭 맞춤 고정이 1차로 충분</td><td>세밀한 필기가 불편하다고 느낄 때</td></tr>
+    <tr><td>페이지 점프/썸네일</td><td>←/→로 시작</td><td>100쪽 넘는 교재에서 답답할 때</td></tr>
+    <tr><td>올가미(자유형) 선택</td><td>사각형 드래그면 도형 크롭에 충분</td><td>-</td></tr>
+    <tr><td>OCR·텍스트 변환</td><td>Claude 비전이 이미지를 직접 읽음</td><td>-</td></tr>
+    <tr><td>MCP 서버</td><td>복사/공유가 서버 0원으로 같은 일을 함</td><td>Claude가 먼저 노트를 조회해야 할 때</td></tr>
+  </table>
+</main>
