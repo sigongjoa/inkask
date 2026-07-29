@@ -15,8 +15,9 @@ final class SnapshotTests: XCTestCase {
         return FileManager.default.temporaryDirectory.appendingPathComponent("snapshots")
     }
 
+    // 아이패드 11" 세로 기준. 가로/스플릿뷰는 호출부에서 크기 지정.
     private func save<V: View>(_ view: V, name: String,
-                               size: CGSize = CGSize(width: 820, height: 1180)) throws {
+                               size: CGSize = CGSize(width: 834, height: 1194)) throws {
         let host = UIHostingController(rootView: view)
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
         // 테스트 호스트의 씬에 붙여야 실제 렌더가 일어남
@@ -41,12 +42,7 @@ final class SnapshotTests: XCTestCase {
         try save(NavigationStack { DocumentListView() }, name: "01-document-list")
     }
 
-    func testSnapshotNoteView() throws {
-        // 도형이 든 샘플 PDF를 임시 문서 폴더에 생성
-        let folder = FileManager.default.temporaryDirectory
-            .appendingPathComponent("snap-\(UUID().uuidString)")
-        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: folder) }
+    private func makeSamplePDF(in folder: URL) throws -> URL {
         let pdfURL = folder.appendingPathComponent("file.pdf")
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 400, height: 550))
         let data = renderer.pdfData { ctx in
@@ -58,7 +54,22 @@ final class SnapshotTests: XCTestCase {
             UIBezierPath(ovalIn: CGRect(x: 120, y: 180, width: 160, height: 160)).stroke()
         }
         try data.write(to: pdfURL)
+        return pdfURL
+    }
 
-        try save(NavigationStack { NoteView(pdfURL: pdfURL) }, name: "02-note-view")
+    // 아이패드 3가지 상황: 세로 / 가로 / Claude와 스플릿뷰(절반 폭)
+    func testSnapshotNoteView() throws {
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("snap-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let pdfURL = try makeSamplePDF(in: folder)
+
+        try save(NavigationStack { NoteView(pdfURL: pdfURL) },
+                 name: "02-note-portrait")
+        try save(NavigationStack { NoteView(pdfURL: pdfURL) },
+                 name: "03-note-landscape", size: CGSize(width: 1194, height: 834))
+        try save(NavigationStack { NoteView(pdfURL: pdfURL) },
+                 name: "04-note-splitview", size: CGSize(width: 507, height: 834))
     }
 }

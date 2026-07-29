@@ -60,12 +60,15 @@ struct NoteView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button("이전 페이지", systemImage: "chevron.left") { go(-1) }
                     .disabled(pageIndex <= 0)
+                    .keyboardShortcut(.leftArrow, modifiers: [])
                 Button("다음 페이지", systemImage: "chevron.right") { go(1) }
                     .disabled(pageIndex >= pageCount - 1)
+                    .keyboardShortcut(.rightArrow, modifiers: [])
                 Button("영역 선택", systemImage: selecting ? "rectangle.dashed.badge.record" : "rectangle.dashed") {
                     selecting.toggle()
                     if !selecting { selRect = nil }
                 }
+                .keyboardShortcut("e", modifiers: [])
                 Button("복사", systemImage: copied ? "checkmark" : "doc.on.doc") {
                     guard let page else { return }
                     UIPasteboard.general.image =
@@ -74,6 +77,7 @@ struct NoteView: View {
                     copied = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
                 }
+                .keyboardShortcut("c", modifiers: [.command])
                 Button("공유", systemImage: "square.and.arrow.up") {
                     guard let page else { return }
                     shareItem = ShareImage(image:
