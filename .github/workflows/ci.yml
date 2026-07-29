@@ -6,8 +6,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Type-check for iOS Simulator
-        run: >
-          xcodebuild -scheme InkAskKit
-          -destination 'generic/platform=iOS Simulator'
-          build CODE_SIGNING_ALLOWED=NO
+      - name: Build and test on iOS Simulator
+        run: |
+          DEVICE=$(xcrun simctl list devices available | grep -m1 -o 'iPhone [^(]*' | xargs)
+          echo "Using simulator: $DEVICE"
+          xcodebuild -scheme InkAskKit \
+            -destination "platform=iOS Simulator,name=$DEVICE" \
+            test CODE_SIGNING_ALLOWED=NO

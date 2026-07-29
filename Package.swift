@@ -8,6 +8,7 @@ let package = Package(
     products: [.library(name: "InkAskKit", targets: ["InkAskKit"])],
     targets: [
         // @main 앱 엔트리는 라이브러리 타깃에서 컴파일 불가라 제외 (12줄짜리 보일러플레이트)
-        .target(name: "InkAskKit", path: "Sources", exclude: ["InkAskApp.swift"])
+        .target(name: "InkAskKit", path: "Sources", exclude: ["InkAskApp.swift"]),
+        .testTarget(name: "InkAskTests", dependencies: ["InkAskKit"], path: "Tests")
     ]
 )
