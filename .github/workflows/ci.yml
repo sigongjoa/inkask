@@ -12,4 +12,12 @@ jobs:
           echo "Using simulator: $DEVICE"
           xcodebuild -scheme InkAskKit \
             -destination "platform=iOS Simulator,name=$DEVICE" \
-            test CODE_SIGNING_ALLOWED=NO
+            test CODE_SIGNING_ALLOWED=NO \
+            TEST_RUNNER_SNAPSHOT_DIR="$PWD/snapshots"
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshots
+          path: snapshots
+          if-no-files-found: warn
